@@ -186,13 +186,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
         print("Player list: " + PhotonNetwork.PlayerList.Length);
         foreach (Player player in PhotonNetwork.PlayerList) {
             scoreBoard.text += player.NickName + ": " + player.GetScore() + "   ";
-            //end game when player score = 10
-            if (player.GetScore() == 1) {
-                //remoev all player in room
-                foreach (Player p in PhotonNetwork.PlayerList) {
-                    LeaveRoom();
-                }
-            }
+            // if (player.GetScore() == 10) {
+            //     LeaveRoom();
+            // }
         }
     }
 
