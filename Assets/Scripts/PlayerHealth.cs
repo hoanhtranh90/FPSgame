@@ -153,7 +153,15 @@ public class PlayerHealth : MonoBehaviourPunCallbacks, IPunObservable {
         foreach (Player player in PhotonNetwork.PlayerList) {
             print(player.NickName + ": " + player.GetScore());
             scoreBoard.text += player.NickName + ": " + player.GetScore() + " ";
+            //end game when player score = 10
+            if (player.GetScore() == 10) {
+                //remoev all player in room
+                foreach (Player p in PhotonNetwork.PlayerList) {
+                    LeaveRoom();
+                }
+            }
         }
+
     }
     /// <summary>
     /// Coroutine function to destory player game object.
@@ -190,6 +198,11 @@ public class PlayerHealth : MonoBehaviourPunCallbacks, IPunObservable {
     }
 
 
-
+    public void LeaveRoom() {
+        PhotonNetwork.LeaveRoom();
+        PhotonNetwork.LeaveLobby();
+        PhotonNetwork.Disconnect();
+        UnityEngine.SceneManagement.SceneManager.LoadScene(1);
+    }
 
 }
