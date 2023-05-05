@@ -185,7 +185,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
         //log score of all player in room
         print("Player list: " + PhotonNetwork.PlayerList.Length);
         foreach (Player player in PhotonNetwork.PlayerList) {
-            scoreBoard.text += player.NickName + ": " + player.GetScore() + "\n";
+            scoreBoard.text += player.NickName + ": " + player.GetScore() + "   ";
         }
     }
 
