@@ -97,6 +97,36 @@ namespace Photon.Realtime
             }
         }
 
+        //score
+        public int score = 0;
+        public int Score
+        {
+            get
+            {
+                return this.score;
+            }
+            set
+            {
+                if (this.score.Equals(value))
+                {
+                    return;
+                }
+
+                this.score = value;
+
+                // update a room, if we changed our nickName locally
+                if (this.IsLocal)
+                {
+                    this.SetPlayerScoreProperty();
+                }
+            }
+        }
+
+        public void AddScore(int newScore)
+        {
+            score += newScore;
+        }
+
         /// <summary>UserId of the player, available when the room got created with RoomOptions.PublishUserId = true.</summary>
         /// <remarks>Useful for <see cref="LoadBalancingClient.OpFindFriends"/> and blocking slots in a room for expected players (e.g. in <see cref="LoadBalancingClient.OpCreateRoom"/>).</remarks>
         public string UserId { get; internal set; }
