@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityStandardAssets.Characters.FirstPerson;
@@ -45,6 +46,7 @@ public class PlayerHealth : MonoBehaviourPunCallbacks, IPunObservable {
     private bool isDead;
     private bool isSinking;
     private bool damaged;
+    private Text scoreText;
 
     /// <summary>
     /// Start is called on the frame when a script is enabled just before
@@ -55,10 +57,17 @@ public class PlayerHealth : MonoBehaviourPunCallbacks, IPunObservable {
         ikControl = GetComponentInChildren<IKControl>();
         damageImage = GameObject.FindGameObjectWithTag("Screen").transform.Find("DamageImage").GetComponent<Image>();
         healthSlider = GameObject.FindGameObjectWithTag("Screen").GetComponentInChildren<Slider>();
+        // Tìm đối tượng Text có tag là "Score"
+        scoreText = GameObject.FindGameObjectWithTag("Score").GetComponent<Text>();
+         // Cập nhật giá trị của scoreText
+        // UpdateScoreText();
         currentHealth = startingHealth;
+        // currscore = startscore;
+        
         if (photonView.IsMine) {
             gameObject.layer = LayerMask.NameToLayer("FPSPlayer");
             healthSlider.value = currentHealth;
+            // scoreText.text = "Score: " + currscore;
         }
         damaged = false;
         isDead = false;
@@ -79,6 +88,16 @@ public class PlayerHealth : MonoBehaviourPunCallbacks, IPunObservable {
             transform.Translate(Vector3.down * sinkSpeed * Time.deltaTime);
         }
     }
+    [PunRPC]
+    void AddScore (int scoreAdd, string enemyName) {
+        // Tìm người chơi có tên trùng với enemyName
+        foreach (Player player in PhotonNetwork.PlayerList) {
+            if (player.NickName == enemyName) {
+                //add score
+                player.AddScore(scoreAdd);
+            }
+        }
+    }
 
     /// <summary>
     /// RPC function to let the player take damage.
@@ -93,6 +112,8 @@ public class PlayerHealth : MonoBehaviourPunCallbacks, IPunObservable {
             currentHealth -= amount;
             if (currentHealth <= 0) {
                 photonView.RPC("Death", RpcTarget.All, enemyName);
+                photonView.RPC("AddScore", RpcTarget.All, 1, enemyName);
+                
             }
             healthSlider.value = currentHealth;
             animator.SetTrigger("IsHurt");
@@ -155,5 +176,8 @@ public class PlayerHealth : MonoBehaviourPunCallbacks, IPunObservable {
             currentHealth = (int)stream.ReceiveNext();
         }
     }
+
+
+
 
 }
