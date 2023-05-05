@@ -186,6 +186,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
         print("Player list: " + PhotonNetwork.PlayerList.Length);
         foreach (Player player in PhotonNetwork.PlayerList) {
             scoreBoard.text += player.NickName + ": " + player.GetScore() + "   ";
+            // if (player.GetScore() == 10) {
+            //     LeaveRoom();
+            // }
         }
     }
 
@@ -196,6 +199,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
         if (PhotonNetwork.IsMasterClient) {
             AddMessage("Player " + other.NickName + " Left Game.");
         }
+        photonView.RPC("UpdateScoreBoard_RPC", RpcTarget.All);
     }
 
     public void LeaveRoom() {
