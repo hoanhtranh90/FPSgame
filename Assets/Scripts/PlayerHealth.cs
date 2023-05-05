@@ -152,18 +152,11 @@ public class PlayerHealth : MonoBehaviourPunCallbacks, IPunObservable {
         print("Player list: " + PhotonNetwork.PlayerList.Length);
         foreach (Player player in PhotonNetwork.PlayerList) {
             print(player.NickName + ": " + player.GetScore());
-<<<<<<< HEAD
             scoreBoard.text += player.NickName + ": " + player.GetScore() + ";";
             if(player.GetScore() >= 5) {
                 scoreBoard.text += "WINNER: " + player.NickName;
                 StartCoroutine("EndGame", 5.0f);
             }
-=======
-            scoreBoard.text += player.NickName + ": " + player.GetScore() + " ";
-            // if (player.GetScore() == 1) {
-            //     LeaveRoom();
-            // }
->>>>>>> c39036e45c3a4b6951588d2df49f5a0f42fe0a13
         }
 
     }
