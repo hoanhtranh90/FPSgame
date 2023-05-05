@@ -186,8 +186,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
         print("Player list: " + PhotonNetwork.PlayerList.Length);
         foreach (Player player in PhotonNetwork.PlayerList) {
             print(player.NickName + ": " + player.GetScore());
-            scoreBoard.text += player.NickName + ": " + player.GetScore() + ";";
+            scoreBoard.text += player.NickName + ": " + player.GetScore() + "  ";
             if(player.GetScore() >= 5) {
+                scoreBoard.text = "";
                 scoreBoard.text += "WINNER: " + player.NickName;
                 StartCoroutine("EndGame", 5.0f);
             }
