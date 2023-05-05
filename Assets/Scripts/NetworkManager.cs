@@ -185,11 +185,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
         //log score of all player in room
         print("Player list: " + PhotonNetwork.PlayerList.Length);
         foreach (Player player in PhotonNetwork.PlayerList) {
-            scoreBoard.text += player.NickName + ": " + player.GetScore() + "   ";
-            // if (player.GetScore() == 10) {
-            //     LeaveRoom();
-            // }
+            print(player.NickName + ": " + player.GetScore());
+            scoreBoard.text += player.NickName + ": " + player.GetScore() + ";";
+            if(player.GetScore() >= 5) {
+                scoreBoard.text += "WINNER: " + player.NickName;
+                StartCoroutine("EndGame", 5.0f);
+            }
         }
+
     }
 
     /// <summary>
