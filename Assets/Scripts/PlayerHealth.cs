@@ -47,7 +47,7 @@ public class PlayerHealth : MonoBehaviourPunCallbacks, IPunObservable {
     private bool isSinking;
     private bool damaged;
     
-
+    private Text scoreBoard;
     /// <summary>
     /// Start is called on the frame when a script is enabled just before
     /// any of the Update methods is called the first time.
@@ -57,7 +57,7 @@ public class PlayerHealth : MonoBehaviourPunCallbacks, IPunObservable {
         ikControl = GetComponentInChildren<IKControl>();
         damageImage = GameObject.FindGameObjectWithTag("Screen").transform.Find("DamageImage").GetComponent<Image>();
         healthSlider = GameObject.FindGameObjectWithTag("Screen").GetComponentInChildren<Slider>();
-        
+        scoreBoard = GameObject.FindGameObjectWithTag("Score").GetComponent<Text>();
          // Cập nhật giá trị của scoreText
         // UpdateScoreText();
         currentHealth = startingHealth;
@@ -144,7 +144,16 @@ public class PlayerHealth : MonoBehaviourPunCallbacks, IPunObservable {
         playerAudio.Play();
         StartCoroutine("StartSinking", sinkTime);
     }
-
+    [PunRPC]
+    void UpdateScoreBoard_RPC() {
+        //clear old
+        scoreBoard.text = "";
+        //log score of all player in room
+        print("Player list: " + PhotonNetwork.PlayerList.Length);
+        foreach (Player player in PhotonNetwork.PlayerList) {
+            scoreBoard.text += player.NickName + ": " + player.GetScore() + "\n";
+        }
+    }
     /// <summary>
     /// Coroutine function to destory player game object.
     /// </summary>
