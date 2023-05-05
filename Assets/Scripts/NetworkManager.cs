@@ -35,12 +35,16 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
     private const int messageCount = 10;
     private string nickNamePrefKey = "PlayerName";
 
+    private Text scoreBoard;
+
     /// <summary>
     /// Start is called on the frame when a script is enabled just before
     /// any of the Update methods is called the first time.
     /// </summary>
     void Start() {
         messages = new Queue<string> (messageCount);
+        // Tìm đối tượng Text có tag là "Score"
+        scoreBoard = GameObject.FindGameObjectWithTag("Score").GetComponent<Text>();
         if (PlayerPrefs.HasKey(nickNamePrefKey)) {
             username.text = PlayerPrefs.GetString(nickNamePrefKey);
         }
@@ -110,6 +114,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         Respawn(0.0f);
+
+        //update score board is all player in room
+        
     }
 
     /// <summary>
@@ -137,8 +144,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
         playerHealth.RespawnEvent += Respawn;
         playerHealth.AddMessageEvent += AddMessage;
         sceneCamera.enabled = false;
+        photonView.RPC("UpdateScoreBoard_RPC", RpcTarget.All);
         if (spawnTime == 0) {
             AddMessage("Player " + PhotonNetwork.LocalPlayer.NickName + " Joined Game.");
+            print("Player list: " + PhotonNetwork.PlayerList.Length);
         } else {
             AddMessage("Player " + PhotonNetwork.LocalPlayer.NickName + " Respawned.");
         }
@@ -165,6 +174,18 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
         messagesLog.text = "";
         foreach (string m in messages) {
             messagesLog.text += m + "\n";
+        }
+    }
+
+    //edit score board when player kill other player
+    [PunRPC]
+    void UpdateScoreBoard_RPC() {
+        //clear old
+        scoreBoard.text = "";
+        //log score of all player in room
+        print("Player list: " + PhotonNetwork.PlayerList.Length);
+        foreach (Player player in PhotonNetwork.PlayerList) {
+            scoreBoard.text += player.NickName + ": " + player.GetScore() + "\n";
         }
     }
 

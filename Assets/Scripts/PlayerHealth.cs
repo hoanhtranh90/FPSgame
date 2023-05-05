@@ -46,7 +46,7 @@ public class PlayerHealth : MonoBehaviourPunCallbacks, IPunObservable {
     private bool isDead;
     private bool isSinking;
     private bool damaged;
-    private Text scoreText;
+    
 
     /// <summary>
     /// Start is called on the frame when a script is enabled just before
@@ -57,8 +57,7 @@ public class PlayerHealth : MonoBehaviourPunCallbacks, IPunObservable {
         ikControl = GetComponentInChildren<IKControl>();
         damageImage = GameObject.FindGameObjectWithTag("Screen").transform.Find("DamageImage").GetComponent<Image>();
         healthSlider = GameObject.FindGameObjectWithTag("Screen").GetComponentInChildren<Slider>();
-        // Tìm đối tượng Text có tag là "Score"
-        scoreText = GameObject.FindGameObjectWithTag("Score").GetComponent<Text>();
+        
          // Cập nhật giá trị của scoreText
         // UpdateScoreText();
         currentHealth = startingHealth;
@@ -90,6 +89,7 @@ public class PlayerHealth : MonoBehaviourPunCallbacks, IPunObservable {
     }
     [PunRPC]
     void AddScore (int scoreAdd, string enemyName) {
+        print("AddScore for " + enemyName);
         // Tìm người chơi có tên trùng với enemyName
         foreach (Player player in PhotonNetwork.PlayerList) {
             if (player.NickName == enemyName) {
@@ -113,6 +113,7 @@ public class PlayerHealth : MonoBehaviourPunCallbacks, IPunObservable {
             if (currentHealth <= 0) {
                 photonView.RPC("Death", RpcTarget.All, enemyName);
                 photonView.RPC("AddScore", RpcTarget.All, 1, enemyName);
+                photonView.RPC("UpdateScoreBoard_RPC", RpcTarget.All);
                 
             }
             healthSlider.value = currentHealth;
@@ -135,6 +136,7 @@ public class PlayerHealth : MonoBehaviourPunCallbacks, IPunObservable {
             fpController.enabled = false;
             animator.SetTrigger("IsDead");
             AddMessageEvent(PhotonNetwork.LocalPlayer.NickName + " was killed by " + enemyName + "!");
+            photonView.RPC("UpdateScoreBoard_RPC", RpcTarget.All);
             RespawnEvent(respawnTime);
             StartCoroutine("DestoryPlayer", respawnTime);
         }
