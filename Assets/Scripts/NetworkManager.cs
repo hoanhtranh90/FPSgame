@@ -196,6 +196,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
         if (PhotonNetwork.IsMasterClient) {
             AddMessage("Player " + other.NickName + " Left Game.");
         }
+        photonView.RPC("UpdateScoreBoard_RPC", RpcTarget.All);
     }
 
     public void LeaveRoom() {
