@@ -177,4 +177,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
         }
     }
 
+    public void LeaveRoom() {
+        PhotonNetwork.LeaveRoom();
+        PhotonNetwork.LeaveLobby();
+        PhotonNetwork.Disconnect();
+        UnityEngine.SceneManagement.SceneManager.LoadScene(1);
+    }
+
 }
