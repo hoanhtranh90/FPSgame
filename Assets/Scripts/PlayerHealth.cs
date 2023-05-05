@@ -153,6 +153,10 @@ public class PlayerHealth : MonoBehaviourPunCallbacks, IPunObservable {
         foreach (Player player in PhotonNetwork.PlayerList) {
             print(player.NickName + ": " + player.GetScore());
             scoreBoard.text += player.NickName + ": " + player.GetScore() + ";";
+            if(player.GetScore() >= 5) {
+                scoreBoard.text += "WINNER: " + player.NickName;
+                StartCoroutine("EndGame", 5.0f);
+            }
         }
     }
     /// <summary>
@@ -188,6 +192,13 @@ public class PlayerHealth : MonoBehaviourPunCallbacks, IPunObservable {
             currentHealth = (int)stream.ReceiveNext();
         }
     }
+
+    IEnumerator EndGame(float delayTime) {
+        yield return new WaitForSeconds(delayTime);
+        PhotonNetwork.LeaveRoom();
+        PhotonNetwork.LoadLevel("Start");
+    }
+
 
 
 
