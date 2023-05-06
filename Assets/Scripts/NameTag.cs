@@ -10,10 +10,7 @@ public class NameTag : MonoBehaviourPunCallbacks {
     [SerializeField]
     private Text nameText;
 
-    /// <summary>
-    /// Start is called on the frame when a script is enabled just before
-    /// any of the Update methods is called the first time.
-    /// </summary>
+    
     void Start() {
         if (photonView.IsMine) {
             photonView.RPC("SetName", RpcTarget.All, PhotonNetwork.NickName);
@@ -22,9 +19,7 @@ public class NameTag : MonoBehaviourPunCallbacks {
         }
     }
 
-    /// <summary>
-    /// Update is called every frame, if the MonoBehaviour is enabled.
-    /// </summary>
+    
     void Update() {
         if (target != null) {
             Vector3 lookAtVec = transform.position + (transform.position - target.position);

@@ -48,10 +48,7 @@ public class PlayerHealth : MonoBehaviourPunCallbacks, IPunObservable {
     private bool damaged;
     
     private Text scoreBoard;
-    /// <summary>
-    /// Start is called on the frame when a script is enabled just before
-    /// any of the Update methods is called the first time.
-    /// </summary>
+    
     void Start() {
         fpController = GetComponent<FirstPersonController>();
         ikControl = GetComponentInChildren<IKControl>();
@@ -73,9 +70,7 @@ public class PlayerHealth : MonoBehaviourPunCallbacks, IPunObservable {
         isSinking = false;
     }
 
-    /// <summary>
-    /// Update is called every frame, if the MonoBehaviour is enabled.
-    /// </summary>
+    
     void Update() {
         if (damaged) {
             damaged = false;
@@ -99,11 +94,7 @@ public class PlayerHealth : MonoBehaviourPunCallbacks, IPunObservable {
         }
     }
 
-    /// <summary>
-    /// RPC function to let the player take damage.
-    /// </summary>
-    /// <param name="amount">Amount of damage dealt.</param>
-    /// <param name="enemyName">Enemy's name who cause this player's death.</param>
+    
     [PunRPC]
     public void TakeDamage(int amount, string enemyName) {
         if (isDead) return;
@@ -123,10 +114,7 @@ public class PlayerHealth : MonoBehaviourPunCallbacks, IPunObservable {
         playerAudio.Play();
     }
 
-    /// <summary>
-    /// RPC function to declare death of player.
-    /// </summary>
-    /// <param name="enemyName">Enemy's name who cause this player's death.</param>
+    
     [PunRPC]
     void Death(string enemyName) {
         isDead = true;
@@ -161,19 +149,13 @@ public class PlayerHealth : MonoBehaviourPunCallbacks, IPunObservable {
         }
 
     }
-    /// <summary>
-    /// Coroutine function to destory player game object.
-    /// </summary>
-    /// <param name="delayTime">Delay time before destory.</param>
+    
     IEnumerator DestoryPlayer(float delayTime) {
         yield return new WaitForSeconds(delayTime);
         PhotonNetwork.Destroy(gameObject);
     }
 
-    /// <summary>
-    /// RPC function to start sinking the player game object.
-    /// </summary>
-    /// <param name="delayTime">Delay time before start sinking.</param>
+    
     IEnumerator StartSinking(float delayTime) {
         yield return new WaitForSeconds(delayTime);
         Rigidbody rigidbody = GetComponent<Rigidbody>();
@@ -182,11 +164,7 @@ public class PlayerHealth : MonoBehaviourPunCallbacks, IPunObservable {
         isSinking = true;
     }
 
-    /// <summary>
-    /// Used to customize synchronization of variables in a script watched by a photon network view.
-    /// </summary>
-    /// <param name="stream">The network bit stream.</param>
-    /// <param name="info">The network message information.</param>
+    
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
         if (stream.IsWriting) {
             stream.SendNext(currentHealth);

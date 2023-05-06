@@ -21,10 +21,7 @@ public class TpsGun : MonoBehaviourPunCallbacks, IPunObservable {
     private float smoothing = 2.0f;
     private float defaultLocalPositionY;
 
-    /// <summary>
-    /// Start is called on the frame when a script is enabled just before
-    /// any of the Update methods is called the first time.
-    /// </summary>
+    
     void Start() {
         if (photonView.IsMine) {
             defaultLocalPositionY = transform.localPosition.y;
@@ -34,19 +31,14 @@ public class TpsGun : MonoBehaviourPunCallbacks, IPunObservable {
         }
     }
 
-    /// <summary>
-    /// Update is called every frame, if the MonoBehaviour is enabled.
-    /// </summary>
+    
     void Update() {
         if (photonView.IsMine) {
             transform.rotation = fpsGun.transform.rotation;
         }
     }
 
-    /// <summary>
-    /// LateUpdate is called every frame, if the Behaviour is enabled.
-    /// It is called after all Update functions have been called.
-    /// </summary>
+    
     void LateUpdate() {
         if (photonView.IsMine) {
             float deltaEulerAngle = 0f;
@@ -66,18 +58,14 @@ public class TpsGun : MonoBehaviourPunCallbacks, IPunObservable {
         }
     }
 
-    /// <summary>
-    /// Public function to call RPC shoot.
-    /// </summary>
+    
     public void RPCShoot() {
         if (photonView.IsMine) {
             photonView.RPC("Shoot", RpcTarget.All);
         }
     }
 
-    /// <summary>
-    /// RPC function to shoot once.
-    /// </summary>
+    
     [PunRPC]
     void Shoot() {
         gunAudio.Play();
@@ -89,11 +77,7 @@ public class TpsGun : MonoBehaviourPunCallbacks, IPunObservable {
         }
     }
 
-    /// <summary>
-    /// Used to customize synchronization of variables in a script watched by a photon network view.
-    /// </summary>
-    /// <param name="stream">The network bit stream.</param>
-    /// <param name="info">The network message information.</param>
+    
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
         if (stream.IsWriting) {
             stream.SendNext(transform.localPosition);

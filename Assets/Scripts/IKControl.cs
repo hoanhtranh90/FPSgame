@@ -19,21 +19,14 @@ public class IKControl : MonoBehaviour {
 
     private Animator animator;
 
-    /// <summary>
-    /// Start is called on the frame when a script is enabled just before
-    /// any of the Update methods is called the first time.
-    /// </summary>
+    
     void Start() {
         animator = GetComponent<Animator>();
     }
 
-    /// <summary>
-    /// Callback for setting up animation IK (inverse kinematics).
-    /// </summary>
-    /// <param name="layerIndex">Index of the layer on which the IK solver is called.</param>
+   
     void OnAnimatorIK(int layerIndex) {
-        // If the IK is active, set the position and rotation directly to the goal.
-        // If the IK is not active, set the position and rotation of the hand and head back to the original position.
+        
         if (ikActive) {
             // Set the look target position, if one has been assigned.
             if (lookObj != null) {
