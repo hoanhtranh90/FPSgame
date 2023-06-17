@@ -24,17 +24,12 @@ public class FpsGun : MonoBehaviour {
 
     private float timer;
 
-    /// <summary>
-    /// Start is called on the frame when a script is enabled just before
-    /// any of the Update methods is called the first time.
-    /// </summary>
+    
     void Start() {
         timer = 0.0f;
     }
 
-    /// <summary>
-    /// Update is called every frame, if the MonoBehaviour is enabled.
-    /// </summary>
+    
     void Update() {
         timer += Time.deltaTime;
         bool shooting = CrossPlatformInputManager.GetButton("Fire1");
@@ -44,9 +39,7 @@ public class FpsGun : MonoBehaviour {
         animator.SetBool("Firing", shooting);
     }
 
-    /// <summary>
-    /// Shoot once, this also calls RPCShoot for third person view gun.
-    /// <summary>
+    
     void Shoot() {
         timer = 0.0f;
         gunLine.enabled = true;
@@ -74,9 +67,7 @@ public class FpsGun : MonoBehaviour {
     }
 
 
-    /// <summary>
-    /// Coroutine function to disable shooting effect.
-    /// <summary>
+    
     public IEnumerator DisableShootingEffect() {
         yield return new WaitForSeconds(0.05f);
         gunLine.enabled = false;
